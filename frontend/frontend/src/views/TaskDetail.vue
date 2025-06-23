@@ -20,6 +20,7 @@
 
           <v-btn type="submit" color="primary" class="mt-3" :loading="loading">Guardar</v-btn>
           <v-btn color="error" class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>
+          <v-btn text color="secondary" class="mt-3" block @click="$router.push('/')">Cancelar</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
         </v-form>
       </v-card-text>
