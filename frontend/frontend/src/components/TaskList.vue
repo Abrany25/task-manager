@@ -1,4 +1,26 @@
 <template>
+    <v-row class="mb-4">
+        <v-col cols="12" md="4">
+            <v-select
+            v-model="selectedStatus"
+            :items="statusOptions"
+            label="Estado"
+            clearable
+            />
+        </v-col>
+        <v-col cols="12" md="4">
+            <v-select
+            v-model="selectedPriority"
+            :items="priorityOptions"
+            label="Prioridad"
+            clearable
+            />
+        </v-col>
+        <v-col cols="12" md="4" class="d-flex align-end">
+            <v-btn color="primary" @click="fetchTasks">Aplicar filtros</v-btn>
+        </v-col>
+    </v-row>
+
   <v-container>
     <h2 class="text-h5 mb-4">Mis Tareas</h2>
 
@@ -9,7 +31,7 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-
+    
     <v-list v-else>
       <v-list-item
         v-for="task in tasks"
@@ -42,10 +64,26 @@ const tasks = ref<Task[]>([])
 const loading = ref(true)
 const error = ref('')
 const user = useUserStore()
+const selectedStatus = ref<string | null>(null)
+const selectedPriority = ref<string | null>(null)
+
+const statusOptions = ['pending', 'in_progress', 'completed']
+const priorityOptions = ['low', 'medium', 'high']
+
 
 const fetchTasks = async () => {
+  loading.value = true
+  error.value = ''
+
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/tasks/', {
+    const queryParams = new URLSearchParams()
+
+    if (selectedStatus.value) queryParams.append('status', selectedStatus.value)
+    if (selectedPriority.value) queryParams.append('priority', selectedPriority.value)
+
+    const url = `http://127.0.0.1:8000/api/tasks/?${queryParams.toString()}`
+
+    const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${user.token}`
       }
@@ -55,8 +93,7 @@ const fetchTasks = async () => {
       throw new Error('Error al cargar las tareas')
     }
 
-    const data = await response.json()
-    tasks.value = data
+    tasks.value = await response.json()
   } catch (err: any) {
     error.value = err.message || 'Error desconocido'
   } finally {
