@@ -37,6 +37,9 @@
           <v-btn type="submit" color="primary" :loading="loading" class="mt-3" block>
             Guardar
           </v-btn>
+          <v-btn text color="secondary" class="mt-2" block @click="$router.push('/')">
+            Cancelar
+          </v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
         </v-form>
       </v-card-text>
@@ -85,8 +88,11 @@ const handleSubmit = async () => {
       })
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      throw new Error('Error al crear la tarea')
+        console.error('Error:', data)
+        throw new Error(data.detail || JSON.stringify(data))
     }
 
     // Redirigir a home después de crear la tarea

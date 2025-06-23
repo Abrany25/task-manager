@@ -18,6 +18,19 @@ class TaskViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['status', 'priority']
 
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_object(self):
+        obj = super().get_object()
+        if obj.user != self.request.user:
+            raise PermissionDenied("No puedes acceder a esta tarea.")
+        return obj
+
+
 #para crear un usuario
 @api_view(['POST'])
 @permission_classes([AllowAny])
