@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
+from tasks.views import register_user
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -30,4 +32,5 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/', include(router.urls)),
     path('api/', include('tasks.urls')),
+    path('api/register/', register_user, name='register_user'),
 ]

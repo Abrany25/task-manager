@@ -7,6 +7,7 @@
           <v-text-field v-model="username" label="Usuario" required />
           <v-text-field v-model="password" label="Contraseña" type="password" required />
           <v-btn type="submit" color="primary" :loading="loading" block>Entrar</v-btn>
+          <v-btn text @click="$router.push('/register')">¿No tienes cuenta? Regístrate</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
         </v-form>
       </v-card-text>
