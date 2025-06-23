@@ -3,6 +3,7 @@
     <h1>Bienvenido</h1>
     <v-btn color="error" @click="logout">Cerrar sesión</v-btn>
     <v-btn color="primary" class="mb-4" @click="$router.push('/new')">Crear nueva tarea</v-btn>
+    <v-btn color="secondary" class="mb-4 ml-2" @click="$router.push('/dashboard')">Ver dashboard</v-btn>
     <TaskList />
   </v-container>
 </template>
