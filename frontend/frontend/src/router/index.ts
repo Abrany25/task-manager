@@ -10,7 +10,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/LoginView.vue')
-  }
+  },
+  {
+  path: '/new',
+  name: 'NewTask',
+  component: () => import('../components/TaskForm.vue')
+}
+
 ]
 
 const router = createRouter({

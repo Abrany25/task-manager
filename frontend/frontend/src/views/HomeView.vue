@@ -2,8 +2,9 @@
   <v-container>
     <h1>Bienvenido</h1>
     <v-btn color="error" @click="logout">Cerrar sesión</v-btn>
+    <v-btn color="primary" class="mb-4" @click="$router.push('/new')">Crear nueva tarea</v-btn>
+    <TaskList />
   </v-container>
-  <TaskList />
 </template>
 
 <script setup lang="ts">
