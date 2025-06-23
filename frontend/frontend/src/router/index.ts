@@ -19,3 +19,19 @@ const router = createRouter({
 })
 
 export default router
+
+import { useUserStore } from '../stores/user'
+
+router.beforeEach((to, _from, next) => {
+  const user = useUserStore()
+
+  // Rutas protegidas
+  const publicPages = ['/login']
+  const authRequired = !publicPages.includes(to.path)
+
+  if (authRequired && !user.isAuthenticated) {
+    return next('/login')
+  }
+
+  next()
+})
