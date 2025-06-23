@@ -41,6 +41,9 @@
       >
         <template #append>
           <span>{{ task.due_date }}</span>
+            <v-btn icon @click="$router.push(`/task/${task.id}`)">
+                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
         </template>
       </v-list-item>
     </v-list>
@@ -50,6 +53,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
+import 'vuetify/styles/main.css'
 
 interface Task {
   id: number

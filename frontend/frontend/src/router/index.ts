@@ -15,8 +15,12 @@ const routes = [
   path: '/new',
   name: 'NewTask',
   component: () => import('../components/TaskForm.vue')
-}
-
+  },
+  {
+  path: '/task/:id',
+  name: 'TaskDetail',
+  component: () => import('../views/TaskDetail.vue')
+  }
 ]
 
 const router = createRouter({
