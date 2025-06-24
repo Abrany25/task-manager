@@ -1,11 +1,18 @@
+
 <template>
-  <v-container>
-    <h1>Bienvenido</h1>
-    <v-btn color="error" @click="logout">Cerrar sesión</v-btn>
-    <v-btn color="primary" class="mb-4" @click="$router.push('/new')">Crear nueva tarea</v-btn>
-    <v-btn color="secondary" class="mb-4 ml-2" @click="$router.push('/dashboard')">Ver dashboard</v-btn>
-    <TaskList />
-  </v-container>
+  <v-row class="mb-4">
+    <v-col cols="12" sm="6">
+      <v-btn color="primary" block @click="$router.push('/new')">Nueva tarea</v-btn>
+    </v-col>
+    <v-col cols="12" sm="6">
+      <v-btn color="secondary" block @click="$router.push('/dashboard')">Dashboard</v-btn>
+    </v-col>
+    <v-col cols="12" sm="6">
+      <v-btn color="error" @click="logout">Cerrar sesión</v-btn>
+    </v-col>
+  </v-row>
+
+  <TaskList />
 </template>
 
 <script setup lang="ts">

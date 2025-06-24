@@ -1,6 +1,6 @@
 <template>
-  <v-container class="d-flex justify-center align-center" style="height: 100vh">
-    <v-card width="400" class="pa-4">
+  <v-container class="fill-height d-flex justify-center align-center" style="height: 100vh">
+    <v-card class="pa-4" width="100%" max-width="400">
       <v-card-title class="text-h6">Iniciar Sesión</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleLogin">

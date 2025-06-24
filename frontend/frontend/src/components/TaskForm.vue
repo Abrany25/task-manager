@@ -4,42 +4,30 @@
       <v-card-title>Crear nueva tarea</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleSubmit" ref="formRef" v-model="valid">
-          <v-text-field
-            label="Título"
-            v-model="title"
-            :rules="[v => !!v || 'El título es obligatorio']"
-            required
-          />
-          <v-textarea
-            label="Descripción"
-            v-model="description"
-            auto-grow
-          />
-          <v-select
-            label="Estado"
-            v-model="status"
-            :items="['pending', 'in_progress', 'completed']"
-            required
-          />
-          <v-select
-            label="Prioridad"
-            v-model="priority"
-            :items="['low', 'medium', 'high']"
-            required
-          />
-          <v-text-field
-            label="Fecha de vencimiento"
-            v-model="dueDate"
-            type="date"
-            required
-          />
+          <v-row dense>
+            <v-col cols="12">
+              <v-text-field label="Título" v-model="title" required />
+            </v-col>
 
-          <v-btn type="submit" color="primary" :loading="loading" class="mt-3" block>
-            Guardar
-          </v-btn>
-          <v-btn text color="secondary" class="mt-2" block @click="$router.push('/')">
-            Cancelar
-          </v-btn>
+            <v-col cols="12">
+              <v-textarea label="Descripción" v-model="description" auto-grow />
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-select label="Estado" :items="['pending','in_progress','completed']" v-model="status" required />
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-select label="Prioridad" :items="['low','medium','high']" v-model="priority" required />
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Fecha límite" v-model="dueDate" type="date" required />
+            </v-col>
+          </v-row>
+
+          <v-btn color="primary" type="submit" block>Guardar</v-btn>
+          <v-btn text color="secondary" class="mt-2" block @click="$router.push('/')">Cancelar</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
         </v-form>
       </v-card-text>

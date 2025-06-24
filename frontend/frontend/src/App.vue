@@ -1,7 +1,7 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  <BaseLayout />
 </template>
+
+<script setup>
+import BaseLayout from '/src/components/BaseLayout.vue'
+</script>
