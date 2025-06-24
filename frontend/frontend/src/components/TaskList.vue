@@ -32,21 +32,23 @@
       color="primary"
     ></v-progress-circular>
     
-    <v-list v-else>
-      <v-list-item
-        v-for="task in tasks"
-        :key="task.id"
-        :title="task.title"
-        :subtitle="`${task.status} | Prioridad: ${task.priority}`"
-      >
-        <template #append>
-          <span>{{ task.due_date }}</span>
-            <v-btn icon @click="$router.push(`/task/${task.id}`)">
-                <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-        </template>
-      </v-list-item>
-    </v-list>
+    <v-row dense>
+      <v-col cols="12" md="6" lg="4" v-for="task in tasks" :key="task.id">
+        <v-card>
+          <v-card-title class="text-h6">{{ task.title }}</v-card-title>
+          <v-card-subtitle class="text-caption">
+            {{ task.status }} | Prioridad: {{ task.priority }}
+          </v-card-subtitle>
+          <v-card-text>{{ task.description }}</v-card-text>
+          <v-card-actions>
+            <v-btn text color="primary" @click="$router.push(`/task/${task.id}`)">Editar</v-btn>
+            <v-spacer />
+            <span class="text-caption">Vence: {{ task.due_date }}</span>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+</v-row>
+
   </v-container>
 </template>
 
