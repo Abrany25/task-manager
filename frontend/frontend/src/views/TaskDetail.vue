@@ -4,19 +4,42 @@
       <v-card-title>Editar Tarea</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleSave" ref="formRef" v-model="valid">
-          <v-text-field label="Título" v-model="task.title" required />
-          <v-textarea label="Descripción" v-model="task.description" />
+          <v-text-field
+                label="Título"
+                prepend-inner-icon="mdi-pencil"
+                density="comfortable"
+                variant="outlined"
+                v-model="task.title"
+                required
+              />
+          <v-textarea
+                label="Descripción"
+                prepend-inner-icon="mdi-pencil"
+                density="comfortable"
+                variant="outlined"
+                v-model="task.description"
+              />
           <v-select
             label="Estado"
             v-model="task.status"
             :items="['pending', 'in_progress', 'completed']"
+            density="comfortable"
+            variant="outlined"
           />
           <v-select
             label="Prioridad"
             v-model="task.priority"
             :items="['low', 'medium', 'high']"
+            density="comfortable"
+            variant="outlined"
           />
-          <v-text-field label="Fecha de vencimiento" v-model="task.due_date" type="date" />
+          <v-text-field
+            label="Fecha de vencimiento"
+            v-model="task.due_date"
+            type="date"
+            density="comfortable"
+            variant="outlined"
+          />
 
           <v-btn type="submit" color="primary" class="mt-3" :loading="loading">Guardar</v-btn>
           <v-btn color="error" class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>

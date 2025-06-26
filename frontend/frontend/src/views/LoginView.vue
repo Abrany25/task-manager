@@ -4,11 +4,11 @@
       <v-card-title class="text-h6">Iniciar Sesión</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleLogin">
-          <v-text-field v-model="username" label="Usuario" required />
-          <v-text-field v-model="password" label="Contraseña" type="password" required />
-          <v-btn type="submit" color="primary" :loading="loading" block>Entrar</v-btn>
-          <v-btn text @click="$router.push('/register')">¿No tienes cuenta? Regístrate</v-btn>
-          <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
+          <v-text-field v-model="username" label="Usuario" required density="comfortable" variant="outlined"/>
+          <v-text-field v-model="password" label="Contraseña" type="password" required density="comfortable" variant="outlined"/>
+          <v-btn type="submit" color="primary" :loading="loading" block>Entrar</v-btn><br>
+          <v-btn color="secondary" @click="$router.push('/register')">¿No tienes cuenta? Regístrate</v-btn>
+          <v-expand-transition><v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert></v-expand-transition>
         </v-form>
       </v-card-text>
     </v-card>

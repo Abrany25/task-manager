@@ -6,23 +6,38 @@
         <v-form @submit.prevent="handleSubmit" ref="formRef" v-model="valid">
           <v-row dense>
             <v-col cols="12">
-              <v-text-field label="Título" v-model="title" required />
+              <v-text-field
+                label="Título"
+                prepend-inner-icon="mdi-pencil"
+                density="comfortable"
+                variant="outlined"
+                v-model="title"
+                required
+              />
             </v-col>
-
             <v-col cols="12">
-              <v-textarea label="Descripción" v-model="description" auto-grow />
+              <v-textarea
+                label="Descripción"
+                prepend-inner-icon="mdi-pencil"
+                density="comfortable"
+                variant="outlined"
+                v-model="description"
+              />
             </v-col>
 
             <v-col cols="12" sm="6">
-              <v-select label="Estado" :items="['pending','in_progress','completed']" v-model="status" required />
+              <v-select label="Estado" :items="['pending','in_progress','completed']" v-model="status" required density="comfortable"
+                variant="outlined"/>
             </v-col>
 
             <v-col cols="12" sm="6">
-              <v-select label="Prioridad" :items="['low','medium','high']" v-model="priority" required />
+              <v-select label="Prioridad" :items="['low','medium','high']" v-model="priority" required density="comfortable"
+                variant="outlined"/>
             </v-col>
 
             <v-col cols="12">
-              <v-text-field label="Fecha límite" v-model="dueDate" type="date" required />
+              <v-text-field label="Fecha límite" v-model="dueDate" type="date" required density="comfortable"
+                variant="outlined"/>
             </v-col>
           </v-row>
 

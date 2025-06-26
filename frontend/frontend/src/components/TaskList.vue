@@ -34,20 +34,30 @@
     
     <v-row dense>
       <v-col cols="12" md="6" lg="4" v-for="task in tasks" :key="task.id">
-        <v-card>
-          <v-card-title class="text-h6">{{ task.title }}</v-card-title>
-          <v-card-subtitle class="text-caption">
-            {{ task.status }} | Prioridad: {{ task.priority }}
-          </v-card-subtitle>
+        <v-card class="elevation-3" rounded="xl">
+          <v-card-item>
+            <div class="d-flex justify-space-between align-center">
+              <div>
+                <h3 class="text-subtitle-1 font-weight-bold">{{ task.title }}</h3>
+                <div class="text-caption text-grey-darken-1">
+                  {{ task.status }} • Prioridad: {{ task.priority }}
+                </div>
+              </div>
+              <v-btn icon color="primary" @click="$router.push(`/task/${task.id}`)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </div>
+          </v-card-item>
           <v-card-text>{{ task.description }}</v-card-text>
-          <v-card-actions>
-            <v-btn text color="primary" @click="$router.push(`/task/${task.id}`)">Editar</v-btn>
-            <v-spacer />
-            <span class="text-caption">Vence: {{ task.due_date }}</span>
+          <v-card-actions class="justify-end">
+            <v-chip color="deep-purple-lighten-3" text-color="white" size="small">
+              Vence: {{ task.due_date }}
+            </v-chip>
           </v-card-actions>
         </v-card>
       </v-col>
-</v-row>
+    </v-row>
+
 
   </v-container>
 </template>
