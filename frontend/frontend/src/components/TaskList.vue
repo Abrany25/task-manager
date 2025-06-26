@@ -34,13 +34,13 @@
     
     <v-row dense>
       <v-col cols="12" md="6" lg="4" v-for="task in tasks" :key="task.id">
-        <v-card class="elevation-3" rounded="xl">
+        <v-card class="elevation-3" rounded="xl" :class="{ 'bg-green-lighten-4': task.status === 'completed' }">
           <v-card-item>
             <div class="d-flex justify-space-between align-center">
               <div>
                 <h3 class="text-subtitle-1 font-weight-bold">{{ task.title }}</h3>
                 <div class="text-caption text-grey-darken-1">
-                  {{ task.status }} • Prioridad: {{ task.priority }}
+                  {{ statusLabels[task.status] }} • Prioridad: {{ priorityLabels[task.priority] }}
                 </div>
               </div>
               <v-btn icon color="primary" @click="$router.push(`/task/${task.id}`)">
@@ -49,7 +49,19 @@
             </div>
           </v-card-item>
           <v-card-text>{{ task.description }}</v-card-text>
-          <v-card-actions class="justify-end">
+          <v-card-actions class="justify-space-between">
+            <v-btn
+              size="small"
+              variant="outlined"
+              @click="toggleStatus(task)">
+              Estado
+            </v-btn>
+            <v-btn
+              size="small"
+              variant="outlined"
+              @click="togglePriority(task)">
+              Prioridad
+            </v-btn>
             <v-chip color="deep-purple-lighten-3" text-color="white" size="small">
               Vence: {{ task.due_date }}
             </v-chip>
@@ -66,14 +78,16 @@
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import 'vuetify/styles/main.css'
+import { statusLabels, priorityLabels } from '../utils/labels'
+
 
 interface Task {
   id: number
   title: string
   description: string
   due_date: string
-  status: string
-  priority: string
+  status: 'pending' | 'in_progress' | 'completed'
+  priority: 'low' | 'medium' | 'high'
 }
 
 const tasks = ref<Task[]>([])
@@ -116,6 +130,50 @@ const fetchTasks = async () => {
     loading.value = false
   }
 }
+
+const toggleStatus = async (task: Task) => {
+  const nextStatus = {
+    pending: 'in_progress',
+    in_progress: 'completed',
+    completed: 'pending'
+  }[task.status]
+
+  const updated = { ...task, status: nextStatus }
+
+  await fetch(`http://127.0.0.1:8000/api/tasks/${task.id}/`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.token}`
+    },
+    body: JSON.stringify(updated)
+  })
+
+  fetchTasks()
+}
+
+// Logica para cambiar prioridad
+const togglePriority = async (task: Task) => {
+  const nextPriority = {
+    low: 'medium',
+    medium: 'high',
+    high: 'low'
+  }[task.priority]
+
+  const updated = { ...task, priority: nextPriority }
+
+  await fetch(`http://127.0.0.1:8000/api/tasks/${task.id}/`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.token}`
+    },
+    body: JSON.stringify(updated)
+  })
+
+  fetchTasks()
+}
+
 
 onMounted(fetchTasks)
 </script>
