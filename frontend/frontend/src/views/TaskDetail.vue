@@ -101,4 +101,5 @@ const handleDelete = async () => {
 }
 
 onMounted(fetchTask)
+
 </script>

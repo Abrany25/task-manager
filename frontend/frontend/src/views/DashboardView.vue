@@ -1,7 +1,7 @@
 <template>
   <v-container>
+    <v-btn text color="secondary" class="mt-2" block @click="$router.push('/')">Cancelar</v-btn>
     <h2 class="text-h5 mb-4">Dashboard</h2>
-
     <v-row>
       <v-col cols="12" md="6">
         <v-card>

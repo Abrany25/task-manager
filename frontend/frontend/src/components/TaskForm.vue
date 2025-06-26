@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="">
     <v-card class="pa-4" max-width="600" elevation="2">
       <v-card-title>Crear nueva tarea</v-card-title>
       <v-card-text>

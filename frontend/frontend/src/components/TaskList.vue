@@ -16,7 +16,7 @@
             clearable
             />
         </v-col>
-        <v-col cols="12" md="4" class="d-flex align-end">
+        <v-col cols="12" md="4" class="align-end">
             <v-btn color="primary" @click="fetchTasks">Aplicar filtros</v-btn>
         </v-col>
     </v-row>
