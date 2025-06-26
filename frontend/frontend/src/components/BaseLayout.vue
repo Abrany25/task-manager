@@ -21,9 +21,7 @@
 
     <v-main>
       <v-container fluid class="pa-4">
-        <transition name="fade" mode="out-in">
-          <router-view />
-        </transition>
+        <router-view />
       </v-container>
     </v-main>
   </v-app>
