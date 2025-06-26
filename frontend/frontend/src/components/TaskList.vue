@@ -32,41 +32,44 @@
       color="primary"
     ></v-progress-circular>
     
-    <v-row dense>
-      <v-col cols="12" md="6" lg="4" v-for="task in tasks" :key="task.id">
-        <v-card class="elevation-3" rounded="xl" :class="{ 'bg-green-lighten-4': task.status === 'completed' }">
-          <v-card-item>
-            <div class="d-flex justify-space-between align-center">
-              <div>
-                <h3 class="text-subtitle-1 font-weight-bold">{{ task.title }}</h3>
-                <div class="text-caption text-grey-darken-1">
-                  {{ statusLabels[task.status] }} • Prioridad: {{ priorityLabels[task.priority] }}
-                </div>
+    <div class="masonry-grid">
+      <div class="masonry-item" v-for="task in tasks" :key="task.id">
+        <v-card
+          class="pa-3 mb-4"
+          rounded="xl"
+          elevation="3"
+          :class="{ 'bg-green-lighten-4': task.status === 'completed' }"
+        >
+          <div class="d-flex justify-space-between align-center mb-2">
+            <div>
+              <h3 class="text-subtitle-1 font-weight-bold">{{ task.title }}</h3>
+              <div class="text-caption text-grey-darken-1">
+                {{ statusLabels[task.status as keyof typeof statusLabels] }} •
+                Prioridad: {{ priorityLabels[task.priority as keyof typeof priorityLabels] }}
               </div>
-              <v-btn icon color="primary" @click="$router.push(`/task/${task.id}`)">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
             </div>
-          </v-card-item>
-          <v-card-text>{{ task.description }}</v-card-text>
+            <v-btn icon color="primary" @click="$router.push(`/task/${task.id}`)">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </div>
+
+          <v-card-text class="mb-2">
+            {{ task.description }}
+          </v-card-text>
+
           <v-card-actions class="justify-space-between">
-            <v-btn
-              size="small"
-              variant="outlined"
-              @click="toggleStatus(task)">
-              Estado
-            </v-btn>
-            <v-btn
-              size="small"
-              variant="outlined"
-              @click="togglePriority(task)">
-              Prioridad
-            </v-btn>
+            <v-btn size="small" variant="outlined" @click="toggleStatus(task)">Estado</v-btn>
+            <v-btn size="small" variant="outlined" @click="togglePriority(task)">Prioridad</v-btn>
             <v-chip color="deep-purple-lighten-3" text-color="white" size="small">
               Vence: {{ task.due_date }}
             </v-chip>
           </v-card-actions>
         </v-card>
+      </div>
+    </div>
+    <v-row v-if="tasks.length === 0" class="mt-4">
+      <v-col cols="12">
+        <v-alert type="info">No hay tareas para mostrar</v-alert>
       </v-col>
     </v-row>
 
@@ -131,6 +134,7 @@ const fetchTasks = async () => {
   }
 }
 
+//Logica para cambiar estado
 const toggleStatus = async (task: Task) => {
   const nextStatus = {
     pending: 'in_progress',
@@ -177,3 +181,33 @@ const togglePriority = async (task: Task) => {
 
 onMounted(fetchTasks)
 </script>
+
+<style scoped>
+.masonry-grid {
+  column-count: 1;
+  column-gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 960px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+</style>
