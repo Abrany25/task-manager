@@ -53,5 +53,8 @@ router.beforeEach((to, _from, next) => {
     return next('/login')
   }
 
+  if (to.path === '/login' && user.isAuthenticated) {
+    return next('/')
+  }
   next()
 })
