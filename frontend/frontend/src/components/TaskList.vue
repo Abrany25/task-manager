@@ -152,6 +152,7 @@ const openTaskDetail = (taskId: number | null = null) => {
 const closeTaskDetail = () => {
   showTaskDetail.value = false
   editingTaskId.value = null
+  fetchTasks()
 }
 
 interface Task {
