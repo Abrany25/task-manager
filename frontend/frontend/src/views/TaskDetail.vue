@@ -54,10 +54,10 @@
             </v-row>
           <v-row dense>
           <v-col class="fill-height d-flex justify-center align-center" cols="6">
-          <v-btn type="submit" color="primary" class="mt-3" :loading="loading">Guardar</v-btn>
+          <v-btn type="submit" block color="primary" class="mt-3" :loading="loading">Guardar</v-btn>
           </v-col>
           <v-col class="fill-height d-flex justify-center align-center" cols="6">
-          <v-btn color="error" class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>
+          <v-btn color="error" block class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>
           </v-col>
           <v-btn text color="secondary" class="mt-3" block @click="$router.push('/')">Cancelar</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>

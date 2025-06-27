@@ -33,7 +33,6 @@
       </v-row>
     </v-card>
 
-
   <v-container>
     <h2 class="text-h5 mb-4">Mis Tareas</h2>
 
@@ -44,39 +43,64 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    
     <div class="masonry-grid">
       <div class="masonry-item" v-for="task in tasks" :key="task.id">
         <v-card
-          class="pa-3 mb-4"
+          class="task-card pa-3 mb-4"
           rounded="xl"
           elevation="3"
           :class="{ 'bg-green-lighten-4': task.status === 'completed' }"
+          @click="goToEdit(task.id)"
         >
           <div class="d-flex justify-space-between align-center mb-2">
             <div class="flex-grow-1 pe-2">
-              <h3 class="text-subtitle-1 font-weight-bold mb-1">{{ task.title }}</h3>
-              <div class="text-caption text-grey-darken-1 mb-1">
-                {{ statusLabels[task.status as keyof typeof statusLabels] }} •
-                Prioridad: {{ priorityLabels[task.priority as keyof typeof priorityLabels] }}
+              <h3 class="text-h6 font-weight-bold mb-1">{{ task.title }}</h3>
+              <div class="text-body-2 text-grey-darken-1 mb-2">
+                Estado: <strong>{{ statusLabels[task.status as keyof typeof statusLabels] }}</strong><br>
+                Prioridad: <strong>{{ priorityLabels[task.priority as keyof typeof priorityLabels] }}</strong>
               </div>
             </div>
-            <v-btn icon color="primary" @click="$router.push(`/task/${task.id}`)">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
           </div>
 
-          <v-card-text class="mb-2">
+          <v-card-text class="text-body-2 mb-2">
             {{ task.description }}
           </v-card-text>
 
-          <v-card-actions class="jd-flex flex-wrap justify-space-between">
-            <v-btn size="small" variant="outlined" @click="toggleStatus(task)">Estado</v-btn>
-            <v-btn size="small" variant="outlined" @click="togglePriority(task)">Prioridad</v-btn>
-            <v-chip color="deep-purple-lighten-3" text-color="white" size="small">
-              Vence: {{ task.due_date }}
-            </v-chip>
-          </v-card-actions>
+          <v-card-actions class="d-flex flex-wrap justify-space-between align-center mt-2">
+          <v-btn
+            size="small"
+            color="blue-darken-2"
+            variant="tonal"
+            rounded="lg"
+            prepend-icon="mdi-swap-horizontal"
+            @click.stop="toggleStatus(task)"
+          >
+            Estado
+          </v-btn>
+
+          <v-btn
+            size="small"
+            color="amber-darken-2"
+            variant="tonal"
+            rounded="lg"
+            prepend-icon="mdi-arrow-up-bold"
+            @click.stop="togglePriority(task)"
+          >
+            Prioridad
+          </v-btn>
+
+          <v-chip
+            color="deep-purple-lighten-3"
+            text-color="white"
+            size="small"
+            class="mt-2"
+            label
+          >
+            <v-icon start icon="mdi-calendar-clock" class="me-1" />
+            Vence: {{ task.due_date }}
+          </v-chip>
+        </v-card-actions>
+
         </v-card>
       </div>
     </div>
@@ -85,8 +109,6 @@
         <v-alert type="info">No hay tareas para mostrar</v-alert>
       </v-col>
     </v-row>
-
-
   </v-container>
 </template>
 
@@ -95,7 +117,7 @@ import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import 'vuetify/styles/main.css'
 import { statusLabels, priorityLabels } from '../utils/labels'
-
+import { useRouter } from 'vue-router'
 
 interface Task {
   id: number
@@ -112,9 +134,7 @@ const error = ref('')
 const user = useUserStore()
 const selectedStatus = ref<string | null>(null)
 const selectedPriority = ref<string | null>(null)
-
-//const statusOptions = ['pending', 'in_progress', 'completed']
-//const priorityOptions = ['low', 'medium', 'high']
+const router = useRouter()
 
 const statusOptions = [
   { title: 'Pendiente', value: 'pending' },
@@ -203,6 +223,10 @@ const togglePriority = async (task: Task) => {
   fetchTasks()
 }
 
+const goToEdit = (id: number) => {
+  router.push(`/task/${id}`)
+}
+
 
 onMounted(fetchTasks)
 </script>
@@ -236,7 +260,6 @@ onMounted(fetchTasks)
   margin-bottom: 16px;
 }
 
-/* Asegura que el contenido dentro de cada card no se corte */
 .v-card {
   display: flex;
   flex-direction: column;
@@ -246,5 +269,13 @@ onMounted(fetchTasks)
 .v-card-actions {
   flex-wrap: wrap;
   justify-content: space-between;
+}
+.task-card {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 </style>

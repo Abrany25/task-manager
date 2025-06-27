@@ -7,8 +7,10 @@
           <v-text-field v-model="username" label="Usuario" required />
           <v-text-field v-model="email" label="Correo electrónico" />
           <v-text-field v-model="password" label="Contraseña" type="password" required />
+          <v-col>
           <v-btn type="submit" color="primary" :loading="loading" block>Registrar</v-btn><br>
-          <v-btn color="secondary" @click="$router.push('/login')">Regresar</v-btn>
+          <v-btn color="secondary" block @click="$router.push('/login')">Regresar</v-btn>
+          </v-col>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
           <v-alert v-if="success" type="success" class="mt-3">{{ success }}</v-alert>
         </v-form>
