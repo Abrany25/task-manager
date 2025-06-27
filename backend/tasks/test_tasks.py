@@ -24,3 +24,18 @@ class TaskCreationTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Task.objects.count(), 1)
         self.assertEqual(Task.objects.first().title, 'Tarea de prueba')
+
+class TaskUnauthenticatedTest(APITestCase):
+    def test_create_task_without_authentication(self):
+        data = {
+            'title': 'No autenticado',
+            'description': 'No debería funcionar',
+            'due_date': '2025-06-30',
+            'status': 'pending',
+            'priority': 'low'
+        }
+
+        response = self.client.post('/api/tasks/', data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(Task.objects.count(), 0)
