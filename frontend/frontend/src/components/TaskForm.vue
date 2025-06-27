@@ -1,6 +1,6 @@
 <template>
-  <v-container class="">
-    <v-card class="pa-4" max-width="600" elevation="2">
+  <v-container class="fill-height d-flex justify-center align-center">
+    <v-card class="pa-6" max-width="600" elevation="3" rounded="xl">
       <v-card-title>Crear nueva tarea</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleSubmit" ref="formRef" v-model="valid">
