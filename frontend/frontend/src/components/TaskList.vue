@@ -41,9 +41,9 @@
           :class="{ 'bg-green-lighten-4': task.status === 'completed' }"
         >
           <div class="d-flex justify-space-between align-center mb-2">
-            <div>
-              <h3 class="text-subtitle-1 font-weight-bold">{{ task.title }}</h3>
-              <div class="text-caption text-grey-darken-1">
+            <div class="flex-grow-1 pe-2">
+              <h3 class="text-subtitle-1 font-weight-bold mb-1">{{ task.title }}</h3>
+              <div class="text-caption text-grey-darken-1 mb-1">
                 {{ statusLabels[task.status as keyof typeof statusLabels] }} •
                 Prioridad: {{ priorityLabels[task.priority as keyof typeof priorityLabels] }}
               </div>
@@ -57,7 +57,7 @@
             {{ task.description }}
           </v-card-text>
 
-          <v-card-actions class="justify-space-between">
+          <v-card-actions class="jd-flex flex-wrap justify-space-between">
             <v-btn size="small" variant="outlined" @click="toggleStatus(task)">Estado</v-btn>
             <v-btn size="small" variant="outlined" @click="togglePriority(task)">Prioridad</v-btn>
             <v-chip color="deep-purple-lighten-3" text-color="white" size="small">
@@ -190,7 +190,7 @@ onMounted(fetchTasks)
 
 @media (min-width: 600px) {
   .masonry-grid {
-    column-count: 2;
+    column-count: 1;
   }
 }
 
@@ -209,5 +209,17 @@ onMounted(fetchTasks)
 .masonry-item {
   break-inside: avoid;
   margin-bottom: 16px;
+}
+
+/* Asegura que el contenido dentro de cada card no se corte */
+.v-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+}
+.v-card-actions {
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 </style>
