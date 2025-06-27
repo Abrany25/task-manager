@@ -50,7 +50,7 @@
           rounded="xl"
           elevation="3"
           :class="{ 'bg-green-lighten-4': task.status === 'completed' }"
-          @click="goToEdit(task.id)"
+          @click="openTaskDetail(task.id)"
         >
           <div class="d-flex justify-space-between align-center mb-2">
             <div class="flex-grow-1 pe-2">
@@ -67,43 +67,52 @@
           </v-card-text>
 
           <v-card-actions class="d-flex flex-wrap justify-space-between align-center mt-2">
-          <v-btn
-            size="small"
-            color="blue-darken-2"
-            variant="tonal"
-            rounded="lg"
-            prepend-icon="mdi-swap-horizontal"
-            @click.stop="toggleStatus(task)"
-          >
-            Estado
-          </v-btn>
+            <v-btn
+              size="small"
+              color="blue-darken-2"
+              variant="tonal"
+              rounded="lg"
+              prepend-icon="mdi-swap-horizontal"
+              @click.stop="toggleStatus(task)"
+            >
+              Estado
+            </v-btn>
 
-          <v-btn
-            size="small"
-            color="amber-darken-2"
-            variant="tonal"
-            rounded="lg"
-            prepend-icon="mdi-arrow-up-bold"
-            @click.stop="togglePriority(task)"
-          >
-            Prioridad
-          </v-btn>
+            <v-btn
+              size="small"
+              color="amber-darken-2"
+              variant="tonal"
+              rounded="lg"
+              prepend-icon="mdi-arrow-up-bold"
+              @click.stop="togglePriority(task)"
+            >
+              Prioridad
+            </v-btn>
 
-          <v-chip
-            color="deep-purple-lighten-3"
-            text-color="white"
-            size="small"
-            class="mt-2"
-            label
-          >
-            <v-icon start icon="mdi-calendar-clock" class="me-1" />
-            Vence: {{ task.due_date }}
-          </v-chip>
-        </v-card-actions>
-
+            <v-chip
+              color="deep-purple-lighten-3"
+              text-color="white"
+              size="small"
+              class="mt-2"
+              label
+            >
+              <v-icon start icon="mdi-calendar-clock" class="me-1" />
+              Vence: {{ task.due_date }}
+            </v-chip>
+          </v-card-actions>
         </v-card>
       </div>
     </div>
+
+    <!--Solo mostramos TaskDetail como modal -->
+    <v-dialog
+      v-model="showTaskDetail"
+      persistent
+      max-width="600px"
+      transition="dialog-transition"
+    >
+      <TaskDetail :task-id="editingTaskId" @close="closeTaskDetail" />
+    </v-dialog>
     <v-row v-if="tasks.length === 0" class="mt-4">
       <v-col cols="12">
         <v-alert type="info">No hay tareas para mostrar</v-alert>
@@ -117,7 +126,33 @@ import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
 import 'vuetify/styles/main.css'
 import { statusLabels, priorityLabels } from '../utils/labels'
-import { useRouter } from 'vue-router'
+//import { useRouter } from 'vue-router'
+//import TaskForm from '../components/TaskForm.vue'
+import TaskDetail from '../views/TaskDetail.vue'
+
+//const showTaskForm = ref(false)
+const showTaskDetail = ref(false)
+const editingTaskId = ref<number | null>(null)
+
+//const openTaskForm = (taskId: number | null = null) => {
+  //editingTaskId.value = taskId
+  //showTaskForm.value = true
+//}
+
+//const closeTaskForm = () => {
+  //showTaskForm.value = false
+  //editingTaskId.value = null
+//}
+
+const openTaskDetail = (taskId: number | null = null) => {
+  editingTaskId.value = taskId
+  showTaskDetail.value = true
+}
+
+const closeTaskDetail = () => {
+  showTaskDetail.value = false
+  editingTaskId.value = null
+}
 
 interface Task {
   id: number
@@ -134,7 +169,7 @@ const error = ref('')
 const user = useUserStore()
 const selectedStatus = ref<string | null>(null)
 const selectedPriority = ref<string | null>(null)
-const router = useRouter()
+//const router = useRouter()
 
 const statusOptions = [
   { title: 'Pendiente', value: 'pending' },
@@ -223,9 +258,9 @@ const togglePriority = async (task: Task) => {
   fetchTasks()
 }
 
-const goToEdit = (id: number) => {
-  router.push(`/task/${id}`)
-}
+//const goToEdit = (id: number) => {
+  //router.push(`/task/${id}`)
+//}
 
 
 onMounted(fetchTasks)
@@ -277,5 +312,9 @@ onMounted(fetchTasks)
 .task-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+::v-deep(.v-overlay__scrim) {
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.9);
 }
 </style>

@@ -59,7 +59,7 @@
           <v-col class="fill-height d-flex justify-center align-center" cols="6">
           <v-btn color="error" block class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>
           </v-col>
-          <v-btn text color="secondary" class="mt-3" block @click="$router.push('/')">Cancelar</v-btn>
+          <v-btn text color="secondary" class="mt-3" block @click="emit('close')">Cancelar</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
           </v-row>
         </v-form>
@@ -69,11 +69,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 
-const route = useRoute()
+const props = defineProps<{ taskId: number | null }>()
+const emit = defineEmits(['close'])
+
 const router = useRouter()
 const user = useUserStore()
 
@@ -84,8 +86,9 @@ const valid = ref(false)
 const formRef = ref()
 
 const fetchTask = async () => {
+  if (!props.taskId) return
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${route.params.id}/`, {
+    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${props.taskId}/`, {
       headers: {
         Authorization: `Bearer ${user.token}`
       }
@@ -101,7 +104,7 @@ const fetchTask = async () => {
 const handleSave = async () => {
   loading.value = true
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${route.params.id}/`, {
+    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${props.taskId}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +114,7 @@ const handleSave = async () => {
     })
 
     if (!response.ok) throw new Error('Error al guardar cambios')
-    router.push('/')
+    emit('close')
   } catch (err: any) {
     error.value = err.message
   } finally {
@@ -124,7 +127,7 @@ const handleDelete = async () => {
 
   loading.value = true
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${route.params.id}/`, {
+    const response = await fetch(`http://127.0.0.1:8000/api/tasks/${props.taskId}/`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${user.token}`
@@ -132,7 +135,7 @@ const handleDelete = async () => {
     })
 
     if (!response.ok) throw new Error('Error al eliminar tarea')
-    router.push('/')
+    emit('close')
   } catch (err: any) {
     error.value = err.message
   } finally {
@@ -140,6 +143,8 @@ const handleDelete = async () => {
   }
 }
 
-onMounted(fetchTask)
-
+watch(() => props.taskId, () => {
+  if (props.taskId) fetchTask()
+}, { immediate: true })
 </script>
+

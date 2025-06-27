@@ -42,7 +42,7 @@
           </v-row>
 
           <v-btn color="primary" type="submit" block>Guardar</v-btn>
-          <v-btn text color="secondary" class="mt-2" block @click="$router.push('/')">Cancelar</v-btn>
+          <v-btn text color="secondary" class="mt-2" block @click="emit('close')">Cancelar</v-btn>
           <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
         </v-form>
       </v-card-text>
@@ -65,6 +65,9 @@ const loading = ref(false)
 const error = ref('')
 const valid = ref(false)
 const formRef = ref()
+
+const emit = defineEmits(['close'])
+
 
 const user = useUserStore()
 
