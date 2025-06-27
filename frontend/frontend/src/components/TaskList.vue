@@ -1,25 +1,38 @@
 <template>
-    <v-row class="mb-4">
-        <v-col cols="12" md="4">
-            <v-select
+    <v-card class="mb-6 pa-4" elevation="2" rounded="lg">
+      <v-row dense align="center" justify="center">
+        <v-col cols="12" sm="6" md="4">
+          <v-select
             v-model="selectedStatus"
             :items="statusOptions"
             label="Estado"
             clearable
-            />
+            density="comfortable"
+            variant="outlined"
+            prepend-icon="mdi-filter-outline"
+          />
         </v-col>
-        <v-col cols="12" md="4">
-            <v-select
+
+        <v-col cols="12" sm="6" md="4">
+          <v-select
             v-model="selectedPriority"
             :items="priorityOptions"
             label="Prioridad"
             clearable
-            />
+            density="comfortable"
+            variant="outlined"
+            prepend-icon="mdi-filter-outline"
+          />
         </v-col>
-        <v-col cols="12" md="4" class="align-end">
-            <v-btn color="primary" @click="fetchTasks">Aplicar filtros</v-btn>
+
+        <v-col cols="12" md="4" class="d-flex justify-center justify-md-end">
+          <v-btn color="primary" @click="fetchTasks" size="large" rounded>
+            Aplicar filtros
+          </v-btn>
         </v-col>
-    </v-row>
+      </v-row>
+    </v-card>
+
 
   <v-container>
     <h2 class="text-h5 mb-4">Mis Tareas</h2>
@@ -100,10 +113,22 @@ const user = useUserStore()
 const selectedStatus = ref<string | null>(null)
 const selectedPriority = ref<string | null>(null)
 
-const statusOptions = ['pending', 'in_progress', 'completed']
-const priorityOptions = ['low', 'medium', 'high']
+//const statusOptions = ['pending', 'in_progress', 'completed']
+//const priorityOptions = ['low', 'medium', 'high']
 
+const statusOptions = [
+  { title: 'Pendiente', value: 'pending' },
+  { title: 'En progreso', value: 'in_progress' },
+  { title: 'Completada', value: 'completed' }
+]
 
+const priorityOptions = [
+  { title: 'Baja', value: 'low' },
+  { title: 'Media', value: 'medium' },
+  { title: 'Alta', value: 'high' }
+]
+
+//inicializar las tareas
 const fetchTasks = async () => {
   loading.value = true
   error.value = ''
