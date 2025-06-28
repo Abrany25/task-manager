@@ -8,15 +8,29 @@ export const useUserStore = defineStore('user', () => {
   const isAuthenticated = ref<boolean>(!!token.value)
   const username = ref<string | null>(null)
 
-  if (token.value) {
+  // Decodificar token y extraer username
+  const decodeToken = (access: string) => {
     try {
-      const payload = JSON.parse(atob(token.value.split('.')[1]))
+      const payload = JSON.parse(atob(access.split('.')[1]))
       username.value = payload.username
     } catch {
       username.value = null
     }
   }
 
+  // Verifica si el token expiró
+  const isTokenExpired = () => {
+    if (!token.value) return true
+    try {
+      const payload = JSON.parse(atob(token.value.split('.')[1]))
+      const now = Math.floor(Date.now() / 1000)
+      return payload.exp < now
+    } catch {
+      return true
+    }
+  }
+
+  // Login
   const login = async (usernameInput: string, password: string) => {
     try {
       const response = await fetch('http://127.0.0.1:8000/api/token/', {
@@ -25,21 +39,15 @@ export const useUserStore = defineStore('user', () => {
         body: JSON.stringify({ username: usernameInput, password })
       })
 
-      if (!response.ok) {
-        throw new Error('Credenciales inválidas')
-      }
+      if (!response.ok) throw new Error('Credenciales inválidas')
 
       const data = await response.json()
       token.value = data.access
       refreshToken.value = data.refresh
-
       localStorage.setItem('token', data.access)
       localStorage.setItem('refreshToken', data.refresh)
-
       isAuthenticated.value = true
-
-      const payload = JSON.parse(atob(data.access.split('.')[1]))
-      username.value = payload.username
+      decodeToken(data.access)
 
       router.push('/')
     } catch (error) {
@@ -48,7 +56,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-// Función para refrescar el access token
+  // Refrescar token si el actual expiró
   const refreshAccessToken = async () => {
     if (!refreshToken.value) {
       logout()
@@ -62,22 +70,19 @@ export const useUserStore = defineStore('user', () => {
         body: JSON.stringify({ refresh: refreshToken.value })
       })
 
-      if (!response.ok) {
-        throw new Error('Refresh token inválido')
-      }
+      if (!response.ok) throw new Error('Refresh token inválido')
 
       const data = await response.json()
       token.value = data.access
       localStorage.setItem('token', data.access)
-
-      const payload = JSON.parse(atob(data.access.split('.')[1]))
-      username.value = payload.username
+      decodeToken(data.access)
     } catch (error) {
       console.error('Error al refrescar token:', error)
       logout()
     }
   }
 
+  // Cerrar sesión
   const logout = () => {
     token.value = null
     refreshToken.value = null
@@ -88,11 +93,21 @@ export const useUserStore = defineStore('user', () => {
     router.push('/login')
   }
 
+  // Verificar expiración cada minuto y refrescar si es necesario
   setInterval(() => {
-    if (isAuthenticated.value) {
+    if (isAuthenticated.value && isTokenExpired()) {
       refreshAccessToken()
     }
-  }, 4 * 60 * 1000)
+  }, 60 * 1000) // cada 1 minuto
 
-  return { token, refreshToken, isAuthenticated, username, login, logout }
+  return {
+    token,
+    refreshToken,
+    isAuthenticated,
+    username,
+    login,
+    logout,
+    refreshAccessToken,
+    isTokenExpired
+  }
 })
