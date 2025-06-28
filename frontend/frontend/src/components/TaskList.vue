@@ -1,50 +1,91 @@
 <template>
+  <v-card class="mb-6 pa-6" elevation="3" rounded="xl">
   <v-row class="mb-4">
-    <v-col cols="12" sm="4">
-      <v-btn color="primary" prepend-icon="mdi-plus" @click="openCreateModal">
+    <v-col cols="12">
+      <h2 class="text-h5 font-weight-medium">Gestión de Tareas</h2>
+      <p class="text-body-2 text-grey-darken-1">Desde aquí puedes crear nuevas tareas, ver el dashboard o filtrar tu lista</p>
+    </v-col>
+  </v-row>
+
+  <v-row class="mb-4" dense>
+    <v-col cols="12" md="4" class="d-flex">
+      <v-btn
+        color="primary"
+        variant="flat"
+        block
+        prepend-icon="mdi-plus"
+        @click="openCreateModal"
+      >
         Nueva tarea
       </v-btn>
     </v-col>
-    <v-col cols="12" sm="4">
-      <v-btn color="secondary" block class="mb-4" size="large" @click="$router.push('/dashboard')">
-        <v-icon start>mdi-chart-box</v-icon>
-          Ver dashboard
+
+    <v-col cols="12" md="4" class="d-flex">
+      <v-btn
+        color="secondary"
+        variant="flat"
+        block
+        prepend-icon="mdi-chart-box"
+        @click="$router.push('/dashboard')"
+      >
+        Ver dashboard
+      </v-btn>
+    </v-col>
+
+    <v-col cols="12" md="4" class="d-flex">
+      <v-btn
+        color="info"
+        variant="flat"
+        block
+        prepend-icon="mdi-refresh"
+        @click="fetchTasks"
+      >
+        Refrescar tareas
       </v-btn>
     </v-col>
   </v-row>
-    <v-card class="mb-6 pa-4" elevation="2" rounded="lg">
-      <v-row dense align="center" justify="center">
-        <v-col cols="12" sm="6" md="4">
-          <v-select
-            v-model="selectedStatus"
-            :items="statusOptions"
-            label="Estado"
-            clearable
-            density="comfortable"
-            variant="outlined"
-            prepend-icon="mdi-filter-outline"
-          />
-        </v-col>
 
-        <v-col cols="12" sm="6" md="4">
-          <v-select
-            v-model="selectedPriority"
-            :items="priorityOptions"
-            label="Prioridad"
-            clearable
-            density="comfortable"
-            variant="outlined"
-            prepend-icon="mdi-filter-outline"
-          />
-        </v-col>
+  <v-divider class="mb-4" />
 
-        <v-col cols="12" md="4" class="d-flex justify-center justify-md-end">
-          <v-btn color="primary" @click="fetchTasks" size="large" rounded>
-            Aplicar filtros
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
+  <v-row dense align="center" justify="center">
+    <v-col cols="12" sm="6" md="4">
+      <v-select
+        v-model="selectedStatus"
+        :items="statusOptions"
+        label="Estado"
+        clearable
+        density="comfortable"
+        variant="outlined"
+        prepend-icon="mdi-filter-outline"
+      />
+    </v-col>
+
+    <v-col cols="12" sm="6" md="4">
+      <v-select
+        v-model="selectedPriority"
+        :items="priorityOptions"
+        label="Prioridad"
+        clearable
+        density="comfortable"
+        variant="outlined"
+        prepend-icon="mdi-filter-outline"
+      />
+    </v-col>
+
+    <v-col cols="12" md="4" class="d-flex justify-center justify-md-end">
+      <v-btn
+        color="primary"
+        variant="elevated"
+        size="large"
+        rounded
+        @click="fetchTasks"
+      >
+        <v-icon start>mdi-filter</v-icon>
+        Aplicar filtros
+      </v-btn>
+    </v-col>
+  </v-row>
+</v-card>
 
   <v-container>
     <h2 class="text-h5 mb-4">Mis Tareas</h2>
