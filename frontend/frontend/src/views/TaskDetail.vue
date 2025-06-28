@@ -1,72 +1,107 @@
 <template>
-  <v-container class="align-center justify-center d-flex">
-    <v-card class="pa-6" max-width="600" elevation="3" rounded="xl" v-if="task">
-      <v-card-title>Editar Tarea</v-card-title>
+  <v-container class="fill-height d-flex justify-center align-center pa-4" style="min-height: 100vh">
+    <v-card
+      class="pa-6 d-flex flex-column"
+      elevation="4"
+      rounded="xl"
+      max-width="600"
+      style="width: 100%; max-height: 95vh; overflow-y: auto"
+      v-if="task"
+    >
+      <v-card-title class="text-h6 font-weight-bold mb-2">
+        Editar tarea
+      </v-card-title>
+
       <v-card-text>
         <v-form @submit.prevent="handleSave" ref="formRef" v-model="valid">
           <v-row dense>
             <v-col cols="12">
               <v-text-field
-                    label="Título"
-                    prepend-inner-icon="mdi-pencil"
-                    density="comfortable"
-                    variant="outlined"
-                    v-model="task.title"
-                    required
-                  />
-              </v-col>
-              <v-col cols="12">
+                label="Título"
+                prepend-inner-icon="mdi-pencil"
+                density="comfortable"
+                variant="outlined"
+                v-model="task.title"
+                required
+              />
+            </v-col>
+
+            <v-col cols="12">
               <v-textarea
-                    label="Descripción"
-                    prepend-inner-icon="mdi-pencil"
-                    density="comfortable"
-                    variant="outlined"
-                    v-model="task.description"
-                  />
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  label="Estado"
-                  v-model="task.status"
-                  :items="['pending', 'in_progress', 'completed']"
-                  density="comfortable"
+                label="Descripción"
+                prepend-inner-icon="mdi-text"
+                density="comfortable"
+                variant="outlined"
+                v-model="task.description"
+              />
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-select
+                label="Estado"
+                v-model="task.status"
+                :items="[
+                  { title: 'Pendiente', value: 'pending' },
+                  { title: 'En progreso', value: 'in_progress' },
+                  { title: 'Completada', value: 'completed' }
+                ]"
+                item-title="title"
+                item-value="value"
+                density="comfortable"
                 variant="outlined"
               />
-              </v-col>
-              <v-col cols="12" sm="6">
+            </v-col>
+
+            <v-col cols="12" sm="6">
               <v-select
                 label="Prioridad"
                 v-model="task.priority"
-                :items="['low', 'medium', 'high']"
+                :items="[
+                  { title: 'Baja', value: 'low' },
+                  { title: 'Media', value: 'medium' },
+                  { title: 'Alta', value: 'high' }
+                ]"
+                item-title="title"
+                item-value="value"
                 density="comfortable"
                 variant="outlined"
               />
-              </v-col>
-              <v-col cols="12" sm="6">
+            </v-col>
+
+            <v-col cols="12">
               <v-text-field
-                label="Fecha de vencimiento"
-                v-model="task.due_date"
+                label="Fecha límite"
                 type="date"
+                v-model="task.due_date"
                 density="comfortable"
                 variant="outlined"
               />
-              </v-col>
-            </v-row>
-          <v-row dense>
-          <v-col class="fill-height d-flex justify-center align-center" cols="6">
-          <v-btn type="submit" block color="primary" class="mt-3" :loading="loading">Guardar</v-btn>
-          </v-col>
-          <v-col class="fill-height d-flex justify-center align-center" cols="6">
-          <v-btn color="error" block class="mt-3 ml-2" @click="handleDelete">Eliminar</v-btn>
-          </v-col>
-          <v-btn text color="secondary" class="mt-3" block @click="emit('close')">Cancelar</v-btn>
-          <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
+            </v-col>
+
+            <v-col cols="12" class="d-flex flex-column gap-2 mt-2">
+              <v-btn type="submit" color="primary" block size="large" rounded :loading="loading">
+                Guardar
+              </v-btn><br>
+
+              <v-btn color="error" variant="tonal" block size="large" rounded @click="handleDelete">
+                Eliminar
+              </v-btn><br>
+
+              <v-btn text color="secondary" block rounded @click="emit('close')">
+                Cancelar
+              </v-btn><br>
+
+              <v-alert v-if="error" type="error" variant="tonal" class="mt-3">
+                {{ error }}
+              </v-alert>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
+
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'

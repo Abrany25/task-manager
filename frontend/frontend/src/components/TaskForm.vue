@@ -93,10 +93,10 @@
                 rounded
               >
                 Guardar
-              </v-btn>
+              </v-btn><br>
 
               <v-btn
-                variant="text"
+                text
                 color="secondary"
                 block
                 size="large"
