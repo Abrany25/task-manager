@@ -108,7 +108,7 @@
         >
           <div class="d-flex justify-space-between align-center mb-2">
             <div class="flex-grow-1 pe-2">
-              <h3 class="text-h6 font-weight-bold mb-1">{{ task.title }}</h3>
+              <h3 class="text-h6 font-weight-bold mb-1 task-title">{{ task.title }}</h3>
               <div class="text-body-2 text-grey-darken-1 mb-2">
                 Estado: <strong>{{ statusLabels[task.status as keyof typeof statusLabels] }}</strong><br>
                 Prioridad: <strong>{{ priorityLabels[task.priority as keyof typeof priorityLabels] }}</strong>
@@ -373,5 +373,22 @@ onMounted(fetchTasks)
 ::v-deep(.v-overlay__scrim) {
   backdrop-filter: blur(5px);
   background-color: rgba(0, 0, 0, 0.9);
+}
+.task-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+.task-card .v-card-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>
