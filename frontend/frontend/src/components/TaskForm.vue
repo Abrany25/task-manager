@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUserStore } from '../stores/user'
-import router from '../router'
+//import router from '../router'
 
 const title = ref('')
 const description = ref('')
@@ -97,16 +97,16 @@ const handleSubmit = async () => {
     const data = await response.json()
 
     if (!response.ok) {
-        console.error('Error:', data)
-        throw new Error(data.detail || JSON.stringify(data))
+      console.error('Error:', data)
+      throw new Error(data.detail || JSON.stringify(data))
     }
 
-    // Redirigir a home después de crear la tarea
-    router.push('/')
+    emit('close')//cerrar el modal
   } catch (err: any) {
     error.value = err.message || 'Error desconocido'
   } finally {
     loading.value = false
   }
 }
+
 </script>

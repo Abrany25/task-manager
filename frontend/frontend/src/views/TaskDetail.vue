@@ -69,14 +69,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+//import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 
 const props = defineProps<{ taskId: number | null }>()
 const emit = defineEmits(['close'])
 
-const router = useRouter()
+//const router = useRouter()
 const user = useUserStore()
 
 const task = ref<any>(null)

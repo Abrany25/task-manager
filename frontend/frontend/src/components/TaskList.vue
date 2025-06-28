@@ -1,4 +1,17 @@
 <template>
+  <v-row class="mb-4">
+    <v-col cols="12" sm="4">
+      <v-btn color="primary" prepend-icon="mdi-plus" @click="openCreateModal">
+        Nueva tarea
+      </v-btn>
+    </v-col>
+    <v-col cols="12" sm="4">
+      <v-btn color="secondary" block class="mb-4" size="large" @click="$router.push('/dashboard')">
+        <v-icon start>mdi-chart-box</v-icon>
+          Ver dashboard
+      </v-btn>
+    </v-col>
+  </v-row>
     <v-card class="mb-6 pa-4" elevation="2" rounded="lg">
       <v-row dense align="center" justify="center">
         <v-col cols="12" sm="6" md="4">
@@ -113,6 +126,10 @@
     >
       <TaskDetail :task-id="editingTaskId" @close="closeTaskDetail" />
     </v-dialog>
+    <v-dialog v-model="showCreateModal" persistent max-width="600px">
+      <TaskForm @close="closeCreateModal" @refresh="fetchTasks" />
+    </v-dialog>
+
     <v-row v-if="tasks.length === 0" class="mt-4">
       <v-col cols="12">
         <v-alert type="info">No hay tareas para mostrar</v-alert>
@@ -127,22 +144,12 @@ import { useUserStore } from '../stores/user'
 import 'vuetify/styles/main.css'
 import { statusLabels, priorityLabels } from '../utils/labels'
 //import { useRouter } from 'vue-router'
-//import TaskForm from '../components/TaskForm.vue'
+import TaskForm from '../components/TaskForm.vue'
 import TaskDetail from '../views/TaskDetail.vue'
 
-//const showTaskForm = ref(false)
+const showCreateModal = ref(false)
 const showTaskDetail = ref(false)
 const editingTaskId = ref<number | null>(null)
-
-//const openTaskForm = (taskId: number | null = null) => {
-  //editingTaskId.value = taskId
-  //showTaskForm.value = true
-//}
-
-//const closeTaskForm = () => {
-  //showTaskForm.value = false
-  //editingTaskId.value = null
-//}
 
 const openTaskDetail = (taskId: number | null = null) => {
   editingTaskId.value = taskId
@@ -152,6 +159,14 @@ const openTaskDetail = (taskId: number | null = null) => {
 const closeTaskDetail = () => {
   showTaskDetail.value = false
   editingTaskId.value = null
+  fetchTasks()
+}
+const openCreateModal = () => {
+  showCreateModal.value = true
+}
+
+const closeCreateModal = () => {
+  showCreateModal.value = false
   fetchTasks()
 }
 
