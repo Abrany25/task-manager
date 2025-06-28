@@ -48,6 +48,7 @@ export const useUserStore = defineStore('user', () => {
       localStorage.setItem('refreshToken', data.refresh)
       isAuthenticated.value = true
       decodeToken(data.access)
+      scheduleTokenRefresh()
 
       router.push('/')
     } catch (error) {
@@ -76,6 +77,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = data.access
       localStorage.setItem('token', data.access)
       decodeToken(data.access)
+      scheduleTokenRefresh()
     } catch (error) {
       console.error('Error al refrescar token:', error)
       logout()
@@ -94,11 +96,31 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // Verificar expiración cada minuto y refrescar si es necesario
-  setInterval(() => {
-    if (isAuthenticated.value && isTokenExpired()) {
-      refreshAccessToken()
+  let refreshTimer: number | undefined
+
+  const scheduleTokenRefresh = () => {
+    if (!token.value) return
+
+    try {
+      const payload = JSON.parse(atob(token.value.split('.')[1]))
+      const exp = payload.exp
+      const now = Math.floor(Date.now() / 1000)
+      const delay = (exp - now - 30) * 1000 // refrescar 30 seg antes de expirar
+
+      if (delay > 0) {
+        clearTimeout(refreshTimer)
+        refreshTimer = window.setTimeout(async () => {
+          await refreshAccessToken()
+          scheduleTokenRefresh() // vuelve a programar después del refresh
+        }, delay)
+      } else {
+        // Token ya expirado, cerrar sesión
+        logout()
+      }
+    } catch {
+      logout()
     }
-  }, 60 * 1000) // cada 1 minuto
+  }
 
   return {
     token,
