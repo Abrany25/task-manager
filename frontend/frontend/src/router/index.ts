@@ -4,32 +4,33 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/LoginView.vue')
+    component: LoginView,
   },
   {
     path: '/',
     name: 'Home',
-    component: () => import('../components/TaskList.vue'),
+    component: TaskList,
+    meta: { requiresAuth: true }
   },
   {
   path: '/new',
   name: 'NewTask',
-  component: () => import('../components/TaskForm.vue')
+  component: TaskForm
   },
   {
   path: '/task/:id',
   name: 'TaskDetail',
-  component: () => import('../views/TaskDetail.vue')
+  component: TaskDetail
   },
   {
   path: '/dashboard',
   name: 'Dashboard',
-  component: () => import('../views/DashboardView.vue')
+  component: DashboardView,
   },
   {
   path: '/register',
   name: 'Register',
-  component: () => import('../views/RegisterView.vue')
+  component: RegisterView
   },
 ]
 
@@ -41,6 +42,12 @@ const router = createRouter({
 export default router
 
 import { useUserStore } from '../stores/user'
+import TaskList from '../components/TaskList.vue'
+import LoginView from '../views/LoginView.vue'
+import TaskForm from '../components/TaskForm.vue'
+import TaskDetail from '../views/TaskDetail.vue'
+import DashboardView from '../views/DashboardView.vue'
+import RegisterView from '../views/RegisterView.vue'
 
 router.beforeEach((to, _from, next) => {
   const user = useUserStore()
