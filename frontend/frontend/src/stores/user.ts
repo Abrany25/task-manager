@@ -45,10 +45,10 @@ export const useUserStore = defineStore('user', () => {
       token.value = data.access
       refreshToken.value = data.refresh
       localStorage.setItem('token', data.access)
-      localStorage.setItem('refreshToken', data.refresh)
+      //localStorage.setItem('refreshToken', data.refresh)
       isAuthenticated.value = true
       decodeToken(data.access)
-      scheduleTokenRefresh()
+      //scheduleTokenRefresh()
 
       router.push('/')
     } catch (error) {
@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // Refrescar token si el actual expiró
-  const refreshAccessToken = async () => {
+  /*const refreshAccessToken = async () => {
     if (!refreshToken.value) {
       logout()
       return
@@ -75,14 +75,16 @@ export const useUserStore = defineStore('user', () => {
 
       const data = await response.json()
       token.value = data.access
+      refreshToken.value = data.refresh;
       localStorage.setItem('token', data.access)
+      localStorage.setItem('refreshToken', data.refresh)
       decodeToken(data.access)
       scheduleTokenRefresh()
     } catch (error) {
       console.error('Error al refrescar token:', error)
       logout()
     }
-  }
+  }*/
 
   // Cerrar sesión
   const logout = () => {
@@ -91,14 +93,14 @@ export const useUserStore = defineStore('user', () => {
     isAuthenticated.value = false
     username.value = null
     localStorage.removeItem('token')
-    localStorage.removeItem('refreshToken')
+    //localStorage.removeItem('refreshToken')
     router.push('/login')
   }
 
   // Verificar expiración cada minuto y refrescar si es necesario
-  let refreshTimer: number | undefined
+  //let refreshTimer: number | undefined
 
-  const scheduleTokenRefresh = () => {
+  /*const scheduleTokenRefresh = () => {
     if (!token.value) return
 
     try {
@@ -110,7 +112,7 @@ export const useUserStore = defineStore('user', () => {
       if (delay > 0) {
         clearTimeout(refreshTimer)
         refreshTimer = window.setTimeout(async () => {
-          await refreshAccessToken()
+          //await refreshAccessToken()
           scheduleTokenRefresh() // vuelve a programar después del refresh
         }, delay)
       } else {
@@ -120,7 +122,7 @@ export const useUserStore = defineStore('user', () => {
     } catch {
       logout()
     }
-  }
+  }*/
 
   return {
     token,
@@ -129,7 +131,7 @@ export const useUserStore = defineStore('user', () => {
     username,
     login,
     logout,
-    refreshAccessToken,
+    //refreshAccessToken,
     isTokenExpired
   }
 })
