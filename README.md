@@ -71,5 +71,3 @@ Accede a la documentación Swagger en:
 http://127.0.0.1:8000/swagger/
 
 No olvidar que db.sqlite3 y venv/ están excluidos del repositorio (.gitignore)
-
-Los tokens se renuevan automáticamente cada 4 minutos gracias al refresh token
